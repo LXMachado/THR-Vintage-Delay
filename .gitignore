@@ -1,0 +1,24 @@
+# Build directories
+build/
+*.o
+*.obj
+*.a
+*.dylib
+*.so
+*.dll
+
+# JUCE specific
+JuceLibraryCode/
+
+# IDE
+.vscode/
+*.suo
+*.user
+*.userprefs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated files
+*.cache/
