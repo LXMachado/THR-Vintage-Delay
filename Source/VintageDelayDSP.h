@@ -15,6 +15,10 @@ public:
 
         delayLineL = juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd>(maxDelaySamples);
         delayLineR = juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd>(maxDelaySamples);
+        juce::dsp::ProcessSpec monoSpec = spec;
+        monoSpec.numChannels = 1;
+        delayLineL.prepare(monoSpec);
+        delayLineR.prepare(monoSpec);
         delayLineL.reset();
         delayLineR.reset();
 
@@ -28,10 +32,10 @@ public:
         hiCutL.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
         hiCutR.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
 
-        lowCutL.prepare(spec);
-        lowCutR.prepare(spec);
-        hiCutL.prepare(spec);
-        hiCutR.prepare(spec);
+        lowCutL.prepare(monoSpec);
+        lowCutR.prepare(monoSpec);
+        hiCutL.prepare(monoSpec);
+        hiCutR.prepare(monoSpec);
 
         lowCutL.setResonance(0.707f);
         lowCutR.setResonance(0.707f);
@@ -148,9 +152,9 @@ public:
             float fbR = dR;
 
             fbL = lowCutL.processSample(0, fbL);
-            fbR = lowCutR.processSample(chR != nullptr ? 1 : 0, fbR);
+            fbR = lowCutR.processSample(0, fbR);
             fbL = hiCutL.processSample(0, fbL);
-            fbR = hiCutR.processSample(chR != nullptr ? 1 : 0, fbR);
+            fbR = hiCutR.processSample(0, fbR);
 
             fbL = saturate(fbL, drive);
             fbR = saturate(fbR, drive);
